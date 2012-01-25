@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SQL in Underscore</title>
+        <style type="text/css">
+            table {border-collapse:collapse;}
+            thead { font-weight: bold; }
+            thead td { border-bottom:1px solid gray; }
+            td { padding: 5px;}
+        </style>
+    </head>
+    <body>
+        <script src="vendor/jquery.js" type="text/javascript"></script>
+        <script src="vendor/underscore.js" type="text/javascript"></script>
+        <script src="live.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function() {
+
+                var drawTable = function(cols, data) {
+
+                    var drawRow = function(values) {
+
+                        var drawCell = function(val) {
+                            if(val === null) {
+                                val = "NULL";
+                            }
+                            return $('<td/>').text(val);
+                        };
+
+                        var $tr = $('<tr/>');
+                        _.each(values, function(val) {
+                            $tr.append(drawCell(val));
+                        });
+                        return $tr;
+                    };
+
+                    var $table = $('<table/>'),
+                        $thead = $('<thead/>');
+
+                    $thead.append(drawRow(cols));
+                    $table.append($thead);
+
+                    _.each(data, function(item) {
+                        var vals = _.map(cols, function(col) { return item[col]; });
+                        $table.append(drawRow(vals));
+                    });
+
+                    return $table;
+                };
+
+                $('body').append(drawTable(
+                            _.keys(data[0]),
+                            data
+                        ).fadeIn());
+            });
+        </script>
+    </body>
+</html>
